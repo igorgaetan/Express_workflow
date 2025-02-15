@@ -25,9 +25,10 @@ jobs:
     # Charger les variables d’environnement depuis le fichier .env
     - name: Load environment variables
       run: |
-        set -a  # Active l'export automatique des variables
-        source .env  # Charge les variables depuis .env
-        set +a  # Désactive l’export automatique après chargement
+        echo "🔍 Chargement du fichier .env..."
+        cat .env  # Debug : Afficher le contenu de .env
+        export $(grep -v '^#' .env | xargs)  # Charge et exporte toutes les variables
+        echo "✅ Variables d'environnement chargées."
 
     # Démarrer toutes les applications listées dans le .env
     - name: Start all applications
