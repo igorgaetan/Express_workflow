@@ -36,7 +36,7 @@ jobs:
 
     - name: Debug environment variables
       run: |
-        echo "📂 APP_LIST = $APP_LIST"
+        echo "📂 APP_LIST = $APP1_PATH"
 
 
     # Démarrer toutes les applications listées dans le .env
