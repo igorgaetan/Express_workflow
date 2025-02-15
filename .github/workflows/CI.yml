@@ -22,23 +22,28 @@ jobs:
         cache: 'npm'
         cache-dependency-path: "**/package-lock.json"
 
-    # Charger les variables d’environnement depuis le fichier .env
-    - name: Load environment variables
+    # Charger toutes les variables d’environnement depuis le fichier .env
+    - name: Load all environment variables
       id: load-env
       run: |
         echo "🔍 Chargement du fichier .env..."
         cat .env  # Debug : Afficher le contenu de .env
-        echo "APP_LIST=$(grep '^APP_LIST=' .env | cut -d '=' -f2)" >> $GITHUB_ENV
-        echo "APP1_PATH=$(grep '^APP1_PATH=' .env | cut -d '=' -f2)" >> $GITHUB_ENV
-        echo "✅ Variables d'environnement chargées."
 
-    - name: Debug environment file
-      run: cat .env  # Afficher le contenu du .env
-
+        # Charger toutes les variables du fichier .env dans $GITHUB_ENV
+        while IFS= read -r line; do
+          if [[ $line != \#* && $line == *"="* ]]; then
+            key=$(echo "$line" | cut -d '=' -f1)
+            value=$(echo "$line" | cut -d '=' -f2-)
+            echo "$key=$value" >> $GITHUB_ENV
+            echo "✅ Variable chargée : $key"
+          fi
+        done < .env
+        
     - name: Debug environment variables
       run: |
         echo "📂 APP_LIST = $APP_LIST"
         echo "📂 APP1_PATH = $APP1_PATH"
+        echo "📂 APP2_PATH = $APP2_PATH"
 
     # Démarrer toutes les applications listées dans le .env
     - name: Start all applications
