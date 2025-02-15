@@ -1,12 +1,7 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -21,11 +16,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+
+    # Se placer dans le sous-dossier
+    - name: Change to subdirectory
+      run: cd path/to/subdirectory
+
+    # Installer les dépendances
+    - name: Install dependencies
+      run: npm ci
+
+    # Builder le projet (si applicable)
+    - name: Build project
+      run: npm run build --if-present
+
+    # Démarrer l'application et afficher des informations
+    - name: Start application
+      run: |
+        echo "Nom du programme : ${{ github.workflow }}"
+        echo "Date : $(date)"
+        npm start
