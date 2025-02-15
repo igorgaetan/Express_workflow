@@ -33,7 +33,7 @@ jobs:
     - name: Start all applications
       run: |
         IFS=',' read -ra APPS <<< "$APP_LIST"
-
+        echo "$APPS"
         for APP_NAME in "${APPS[@]}"; do
           # Construire les noms de variables
           APP_VAR_PATH="${APP_NAME^^}_PATH"  
