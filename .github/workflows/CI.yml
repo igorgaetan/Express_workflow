@@ -55,7 +55,7 @@ jobs:
           APP_VAR_PATH="${APP_NAME^^}_PATH"  
           APP_PATH="${!APP_VAR_PATH}"
 
-          echo "$APP_PATH"
+          echo "voici la variable APP_PATH $APP_PATH"
           # Afficher le nom de l’application et la date
           echo "-----------------------------------"
           echo "🚀 Démarrage de l'application : $APP_NAME"
