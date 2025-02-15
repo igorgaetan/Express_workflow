@@ -24,20 +24,21 @@ jobs:
 
     # Charger les variables d’environnement depuis le fichier .env
     - name: Load environment variables
+      id: load-env
       run: |
         echo "🔍 Chargement du fichier .env..."
         cat .env  # Debug : Afficher le contenu de .env
-        export $(grep -v '^#' .env | xargs)  # Charge et exporte toutes les variables
+        echo "APP_LIST=$(grep '^APP_LIST=' .env | cut -d '=' -f2)" >> $GITHUB_ENV
+        echo "APP1_PATH=$(grep '^APP1_PATH=' .env | cut -d '=' -f2)" >> $GITHUB_ENV
         echo "✅ Variables d'environnement chargées."
 
     - name: Debug environment file
       run: cat .env  # Afficher le contenu du .env
 
-
     - name: Debug environment variables
       run: |
-        echo "📂 APP_LIST = $APP1_PATH"
-
+        echo "📂 APP_LIST = $APP_LIST"
+        echo "📂 APP1_PATH = $APP1_PATH"
 
     # Démarrer toutes les applications listées dans le .env
     - name: Start all applications
@@ -48,17 +49,13 @@ jobs:
           # Construire les noms de variables
           APP_VAR_PATH="${APP_NAME^^}_PATH"  
           APP_PATH="${!APP_VAR_PATH}"
-
           
           # Afficher le nom de l’application et la date
           echo "-----------------------------------"
           echo "🚀 Démarrage de l'application : $APP_NAME"
           echo "📅 Date : $(date)"
           echo "-----------------------------------"
-
-
           cd "$APP_PATH"
-
           npm ci
           npm run build --if-present
           npm start & echo $! > "$APP_PATH/app.pid"
