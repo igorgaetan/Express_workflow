@@ -25,7 +25,7 @@ jobs:
     # Étape 3 : Ajouter le dépôt cible comme remote
     - name: Add target repository as remote
       run: |
-        git remote add target https://${{ secrets.GITHUB_TOKEN }}@github.com/owner/tibackend.git
+        git remote add target https://${{ secrets.GITHUB_TOKEN }}@github.com/owner/annuaire.git
         git fetch target
 
     # Étape 4 : Pousser les modifications vers le dépôt cible
