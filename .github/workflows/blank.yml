@@ -10,13 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Étape 1 : Cloner le dépôt source
-    - name: Checkout source repository
+    # Étape 1 : Cloner le dépôt courant (celui sur lequel se trouve le GitHub Action)
+    - name: Checkout current repository
       uses: actions/checkout@v4
       with:
-        repository: owner/try  # Remplacez par le nom du dépôt source
         token: ${{ secrets.GITHUB_TOKEN }}  # Utilisez le token GitHub par défaut
-        path: source-repo  # Cloner dans un sous-dossier
 
     # Étape 2 : Configurer Git
     - name: Configure Git
@@ -27,12 +25,10 @@ jobs:
     # Étape 3 : Ajouter le dépôt cible comme remote
     - name: Add target repository as remote
       run: |
-        cd source-repo
         git remote add target https://${{ secrets.GITHUB_TOKEN }}@github.com/owner/tibackend.git
         git fetch target
 
     # Étape 4 : Pousser les modifications vers le dépôt cible
     - name: Push changes to target repository
       run: |
-        cd source-repo
-        git push target main:main  # Pousser la branche main du dépôt source vers la branche main du dépôt cible
+        git push target main:main  # Pousser la branche main du dépôt courant vers la branche main du dépôt cible
