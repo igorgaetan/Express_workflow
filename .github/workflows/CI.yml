@@ -64,12 +64,6 @@ jobs:
           echo "🔍 Vérification de APP_PATH pour $APP_NAME : $APP_PATH"
           echo "-----------------------------------"
 
-          # Vérifier si le répertoire existe
-          if [[ ! -d "$APP_PATH" ]]; then
-            echo "❌ Le répertoire $APP_PATH n'existe pas."
-            exit 1
-          fi
-
           # Afficher le nom de l’application et la date
           echo "🚀 Démarrage de l'application : $APP_NAME"
           echo "📅 Date : $(date)"
@@ -88,4 +82,6 @@ jobs:
           PID=$!
           echo "$PID" > app.pid
           echo "✅ Application $APP_NAME démarrée avec PID $PID"
+
+          cd - >/dev/null
         done
