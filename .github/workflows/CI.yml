@@ -21,7 +21,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: App1/package-lock.json  # Cache pour le bon dossier
+        #cache-dependency-path: App1/package-lock.json  # Cache pour le bon dossier
 
     # Installer les dépendances dans App1
     - name: Install dependencies
