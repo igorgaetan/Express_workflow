@@ -34,9 +34,9 @@ jobs:
       working-directory: ./App1  
 
     # Démarrer l'application et afficher des informations
-    - name: Start application
+    - name: Start application in background
       run: |
         echo "Nom du programme : ${{ github.workflow }}"
         echo "Date : $(date)"
-        npm start
+        npm start & echo $! > app.pid  
       working-directory: ./App1  
