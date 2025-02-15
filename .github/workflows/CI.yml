@@ -16,6 +16,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Load environment variables
+      run: |
+        set -a  # Active l'export automatique des variables
+        source env  # Charge les variables depuis env
+        set +a  # Désactive l’export automatique après chargement
+
+        
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
