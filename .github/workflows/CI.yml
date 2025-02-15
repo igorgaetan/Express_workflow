@@ -22,12 +22,16 @@ jobs:
         cache: 'npm'
         cache-dependency-path: "**/package-lock.json"
 
-    # Charger toutes les variables d’environnement depuis le fichier .env
+    # Charger toutes les variables d’environnement depuis le fichier .env-git
     - name: Load all environment variables
       id: load-env
       run: |
-        echo "🔍 Chargement du fichier .env..."
-        cat .env  # Debug : Afficher le contenu de .env
+        echo "🔍 Chargement du fichier .env-git..."
+        if [[ ! -f .env-git ]]; then
+          echo "❌ Fichier .env-git non trouvé."
+          exit 1
+        fi
+        cat .env-git  # Debug : Afficher le contenu de .env-git
 
         # Charger toutes les variables du fichier .env-git dans $GITHUB_ENV
         while IFS= read -r line; do
@@ -45,7 +49,7 @@ jobs:
         echo "📂 APP1_PATH = $APP1_PATH"
         echo "📂 APP2_PATH = $APP2_PATH"
 
-    # Démarrer toutes les applications listées dans le .env
+    # Démarrer toutes les applications listées dans le .env-git
     - name: Start all applications
       run: |
         IFS=',' read -ra APPS <<< "$APP_LIST"
@@ -54,16 +58,34 @@ jobs:
           # Construire les noms de variables
           APP_VAR_PATH="${APP_NAME^^}_PATH"  
           APP_PATH="${!APP_VAR_PATH}"
-
-          echo "voici la variable APP_PATH $APP_PATH"
-          # Afficher le nom de l’application et la date
+          
+          # Afficher la valeur de APP_PATH pour vérification
           echo "-----------------------------------"
+          echo "🔍 Vérification de APP_PATH pour $APP_NAME : $APP_PATH"
+          echo "-----------------------------------"
+
+          # Vérifier si le répertoire existe
+          if [[ ! -d "$APP_PATH" ]]; then
+            echo "❌ Le répertoire $APP_PATH n'existe pas."
+            exit 1
+          fi
+
+          # Afficher le nom de l’application et la date
           echo "🚀 Démarrage de l'application : $APP_NAME"
           echo "📅 Date : $(date)"
-          echo "-----------------------------------"
-
+          
+          # Se déplacer dans le répertoire de l'application
           cd "$APP_PATH"
+          
+          # Installer les dépendances
           npm ci
+          
+          # Builder le projet (si applicable)
           npm run build --if-present
-          npm start & echo $! > "$APP_PATH/app.pid"
+          
+          # Démarrer l'application et enregistrer le PID
+          npm start &
+          PID=$!
+          echo "$PID" > app.pid
+          echo "✅ Application $APP_NAME démarrée avec PID $PID"
         done
