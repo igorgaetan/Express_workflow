@@ -6,7 +6,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -15,29 +14,35 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-        
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: App1/package-lock.json  # Cache pour le bon dossier
+        cache-dependency-path: "**/package-lock.json"
 
-  
-    # Installer les dépendances dans App1
-    - name: Install dependencies
-      run: npm ci
-      working-directory: ./App1  
-
-    # Builder le projet
-    - name: Build project
-      run: npm run build --if-present
-      working-directory: ./App1  
-
-    # Démarrer l'application et afficher des informations
-    - name: Start application in background
+    # Charger les variables d’environnement depuis le fichier .env
+    - name: Load environment variables
       run: |
-        echo "Nom du programme : ${{ github.workflow }}"
-        echo "Date : $(date)"
-        npm start & echo $! > app.pid  
-      working-directory: ./App1  
+        set -a  # Active l'export automatique des variables
+        source .env  # Charge les variables depuis .env
+        set +a  # Désactive l’export automatique après chargement
+
+    # Démarrer toutes les applications listées dans le .env
+    - name: Start all applications
+      run: |
+        IFS=',' read -ra APPS <<< "$APP_LIST"
+
+        for APP_NAME in "${APPS[@]}"; do
+          # Construire les noms de variables
+          APP_VAR_PATH="${APP_NAME^^}_PATH"  
+          APP_PATH="${!APP_VAR_PATH}"
+
+          echo "Démarrage de $app_name..."
+          cd "$APP_PATH"
+
+          npm ci
+          npm run build --if-present
+          npm start & echo $! > "$APP_PATH/app.pid"
+        done
