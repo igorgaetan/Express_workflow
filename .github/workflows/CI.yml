@@ -30,10 +30,14 @@ jobs:
         export $(grep -v '^#' .env | xargs)  # Charge et exporte toutes les variables
         echo "✅ Variables d'environnement chargées."
 
+    - name: Debug environment variables
+      run: |
+        echo "📂 APP_LIST = $APP_LIST"
+
+
     # Démarrer toutes les applications listées dans le .env
     - name: Start all applications
       run: |
-        echo "Liste des applications: $APP_LIST"
         IFS=',' read -ra APPS <<< "$APP_LIST"
         
         for APP_NAME in "${APPS[@]}"; do
