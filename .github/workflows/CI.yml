@@ -60,6 +60,9 @@ jobs:
           echo "🚀 Démarrage de l'application : $APP_NAME"
           echo "📅 Date : $(date)"
           echo "-----------------------------------"
+
+          echo "$APP_PATH"
+          
           cd "$APP_PATH"
           npm ci
           npm run build --if-present
