@@ -23,7 +23,11 @@ jobs:
         cache-dependency-path: "**/package-lock.json"
 
     # Charger les variables d’environnement depuis le fichier .env
-    
+    - name: Load environment variables
+      run: |
+        set -a  # Active l'export automatique des variables
+        source .env  # Charge les variables depuis .env
+        set +a  # Désactive l’export automatique après chargement
 
     # Démarrer toutes les applications listées dans le .env
     - name: Start all applications
