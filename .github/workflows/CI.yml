@@ -30,6 +30,10 @@ jobs:
         export $(grep -v '^#' .env | xargs)  # Charge et exporte toutes les variables
         echo "✅ Variables d'environnement chargées."
 
+    - name: Debug environment file
+      run: cat .env  # Afficher le contenu du .env
+
+
     - name: Debug environment variables
       run: |
         echo "📂 APP_LIST = $APP_LIST"
