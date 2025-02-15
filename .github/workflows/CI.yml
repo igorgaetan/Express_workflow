@@ -54,14 +54,15 @@ jobs:
           # Construire les noms de variables
           APP_VAR_PATH="${APP_NAME^^}_PATH"  
           APP_PATH="${!APP_VAR_PATH}"
-          
+
+          echo "$APP_PATH"
           # Afficher le nom de l’application et la date
           echo "-----------------------------------"
           echo "🚀 Démarrage de l'application : $APP_NAME"
           echo "📅 Date : $(date)"
           echo "-----------------------------------"
 
-          echo "$APP_PATH"
+          
           
           cd "$APP_PATH"
           npm ci
