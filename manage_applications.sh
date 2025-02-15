@@ -14,7 +14,6 @@ else
   echo ".env file not found!"
   exit 1
 fi
-
 if [ -z "$APP_LIST" ]; then
   echo "APP_LIST not defined in .env!"
   exit 1
@@ -78,7 +77,7 @@ start_apps() {
     cp "$APP_PATH/app.log" "logs/$APP_NAME-start.log"
   done
   echo "All applications started."
-  echo "une copie des logs au demarrage se trouve dans le dossier logs"
+  echo "des copies des logs au demarrage se trouve dans le dossier logs"
 }
 
 stop_apps() {
