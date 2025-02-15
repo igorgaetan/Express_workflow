@@ -25,7 +25,7 @@ jobs:
 
     # Se placer dans le sous-dossier
     - name: Change to subdirectory
-      run: cd ./App1
+      run: cd ./../../App1
 
     # Installer les dépendances
     - name: Install dependencies
