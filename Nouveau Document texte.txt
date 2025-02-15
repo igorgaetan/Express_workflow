@@ -1,0 +1,19 @@
+npm start -- --port 4000
+
+
+chmod +x anage_applications.sh
+./manage_applications.sh start
+
+
+sous windows
+netstat -ano | findstr LISTENING //Affihce la liste des ports
+netstat -ano | findstr :<PORT>
+taskkill /PID <PID> /F
+
+sous linux
+lsof -i :<PORT>
+lsof -i -P -n | grep LISTEN
+kill <PID>
+kill -9 <PID> //forcer l'arret
+
+DEBUG=myapp:* npm start
