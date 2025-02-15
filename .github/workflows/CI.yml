@@ -29,7 +29,7 @@ jobs:
         echo "🔍 Chargement du fichier .env..."
         cat .env  # Debug : Afficher le contenu de .env
 
-        # Charger toutes les variables du fichier .env dans $GITHUB_ENV
+        # Charger toutes les variables du fichier .env-git dans $GITHUB_ENV
         while IFS= read -r line; do
           if [[ $line != \#* && $line == *"="* ]]; then
             key=$(echo "$line" | cut -d '=' -f1)
@@ -37,7 +37,7 @@ jobs:
             echo "$key=$value" >> $GITHUB_ENV
             echo "✅ Variable chargée : $key"
           fi
-        done < .env
+        done < .env-git
         
     - name: Debug environment variables
       run: |
