@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ $# -ne 1 ]; then
-  echo "Usage: $0 {start|stop|restart}"
+  echo "Usage: $0 {start|stop|restart|install_packages}"
   exit 1
 fi
 
@@ -112,6 +112,31 @@ restart_apps() {
   echo "Applications restarted."
 }
 
+install_packages() {
+
+  IFS=',' read -ra APPS <<< "$APP_LIST"
+  for APP_NAME in "${APPS[@]}"; do
+    # Construire les noms de variables
+    APP_VAR_PATH="${APP_NAME^^}_PATH"  # ex: APP1_PATH
+    APP_VAR_PORT="${APP_NAME^^}_PORT"  # ex: APP1_PORT
+
+    APP_PATH="${!APP_VAR_PATH}"
+    APP_PORT="${!APP_VAR_PORT}"
+
+    echo "Installation des pakages de $APP_NAME (npm install) dans $APP_PATH"
+
+    # Se placer dans le dossier de l'application et lancer le script "start"
+    # en passant la variable PORT (si l'app le supporte) :
+    cd "$APP_PATH" || exit 1
+    npm install
+    
+    # Retour dans le répertoire initial (important si plusieurs apps)
+    cd - >/dev/null
+    
+  done
+  echo "Packages installed"
+}
+
 # Exécuter la fonction correspondante au mode
 case "$MODE" in
   "start")
@@ -123,8 +148,11 @@ case "$MODE" in
   "restart")
     restart_apps
     ;;
+  "install_packages")
+    install_packages
+    ;;
   *)
-    echo "Invalid option. Usage: $0 {start|stop|restart}"
+    echo "Invalid option. Usage: $0 {start|stop|restart|install_packages}"
     exit 1
     ;;
 esac
