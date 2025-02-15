@@ -32,8 +32,9 @@ jobs:
     # Démarrer toutes les applications listées dans le .env
     - name: Start all applications
       run: |
+        echo "Liste des applications: $APP_LIST"
         IFS=',' read -ra APPS <<< "$APP_LIST"
-        echo "$APPS"
+        
         for APP_NAME in "${APPS[@]}"; do
           # Construire les noms de variables
           APP_VAR_PATH="${APP_NAME^^}_PATH"  
