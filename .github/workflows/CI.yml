@@ -40,3 +40,8 @@ jobs:
         echo "Date : $(date)"
         npm start & echo $! > app.pid  
       working-directory: ./App1  
+
+    - name: Stop application
+      run: |
+        kill $(cat app.pid)
+        rm app.pid
