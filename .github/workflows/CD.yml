@@ -24,7 +24,7 @@ jobs:
     # Étape 3 : Ajouter le dépôt cible comme remote
     - name: Add target repository as remote
       run: |
-        git remote add target https://${{ secrets.TARGET_REPO_TOKEN }}@github.com/igorgaetan/sade-automation-script-deployment.git
+        git remote add target https://${{ secrets.TARGET_REPO_TOKEN }}@github.com/igorgaetan/annuaire.git
         git fetch target
         
     # Étape 4 : Récupérer les modifications du dépôt cible
