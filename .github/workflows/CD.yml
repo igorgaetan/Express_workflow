@@ -27,7 +27,12 @@ jobs:
         git remote add target https://${{ secrets.TARGET_REPO_TOKEN }}@github.com/igorgaetan/sade-automation-script-deployment.git
         git fetch target
         
-    # Étape 4 : Pousser les modifications vers le dépôt cible
+    # Étape 4 : Récupérer les modifications du dépôt cible
+    - name: Pull latest changes from target repository
+      run: |
+        git pull --rebase target main
+
+    # Étape 5 : Pousser les modifications vers le dépôt cible
     - name: Push changes to target repository
       run: |
-        git push target main:main  # Pousser la branche main du dépôt courant vers la branche main du dépôt cible
+        git push target main:main
