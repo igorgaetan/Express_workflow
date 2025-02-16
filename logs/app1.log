@@ -2,3 +2,7 @@
 > myapp@0.0.0 start
 > node ./bin/www
 
+[0mGET / [36m304 [0m366.714 ms - -[0m
+[0mGET /stylesheets/style.css [36m304 [0m1.681 ms - -[0m
+[0mGET / [36m304 [0m11.672 ms - -[0m
+[0mGET /stylesheets/style.css [36m304 [0m0.543 ms - -[0m

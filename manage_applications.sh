@@ -36,7 +36,7 @@ start_apps() {
     # Se placer dans le dossier de l'application et lancer le script "start"
     # en passant la variable PORT (si l'app le supporte) :
     cd "$APP_PATH" || exit 1
-    PORT="$APP_PORT" npm start > app.log 2>&1 &  
+    PORT="$APP_PORT" npm start > ./../logs/$APP_NAME.log 2>&1 &  
     NPM_PID=$!  
     
     # Attendre que le processus enfant soit lancé
@@ -69,15 +69,10 @@ start_apps() {
     # Retour dans le répertoire initial (important si plusieurs apps)
     cd - >/dev/null
     
-    echo "$APP_NAME=$CHILD_PID" >> pidfile
+    echo "$APP_NAME=$CHILD_PID" >> pidfile    
 
-    echo "les logs en temps de cette application se trouve dans $APP_PATH/app.log"
-    
-
-    cp "$APP_PATH/app.log" "logs/$APP_NAME-start.log"
   done
   echo "All applications started."
-  echo "des copies des logs au demarrage se trouve dans le dossier logs"
 }
 
 stop_apps() {
@@ -90,18 +85,12 @@ stop_apps() {
     APP_NAME=$(echo "$line" | cut -d '=' -f1)
     PID=$(echo "$line" | cut -d '=' -f2)
 
-    # Copier les fichiers logs
-    APP_VAR_PATH="${APP_NAME^^}_PATH"  # ex: APP1_PATH
-    APP_PATH="${!APP_VAR_PATH}"
-    cp "$APP_PATH/app.log" "logs/$APP_NAME-end.log"
-
     echo "Stopping $APP_NAME with PID $PID"
     kill "$PID" 2>/dev/null
   done < pidfile
 
   rm -f pidfile
   echo "All applications stopped."
-  echo "les logs finaux se  trouvent dans le dossier logs"
 }
 
 restart_apps() {
