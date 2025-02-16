@@ -10,24 +10,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Étape 1 : Cloner le dépôt courant (celui sur lequel se trouve le GitHub Action)
+    # Étape 1 : Cloner le dépôt courant
     - name: Checkout current repository
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}  # Utilisez le token GitHub par défaut
+        token: ${{ secrets.TARGET_REPO_TOKEN }}  # Utilisez le token GitHub par défaut
 
     # Étape 2 : Configurer Git
     - name: Configure Git
       run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
-
+        git config --global user.name "igorgaetan"
+        git config --global user.email "igorkwenja@github.com"
     # Étape 3 : Ajouter le dépôt cible comme remote
     - name: Add target repository as remote
       run: |
-        git remote add target https://${{ secrets.GITHUB_TOKEN }}@github.com/owner/annuaire.git
+        git remote add target https://${{ secrets.TARGET_REPO_TOKEN }}@github.com/igorgaetan/sade-automation-script-deployment.git
         git fetch target
-
+        
     # Étape 4 : Pousser les modifications vers le dépôt cible
     - name: Push changes to target repository
       run: |
