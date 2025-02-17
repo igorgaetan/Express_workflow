@@ -2,7 +2,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "dev" ]
 
 jobs:
   build:
@@ -28,11 +28,10 @@ jobs:
       run: |
         echo "🔍 Chargement du fichier .env-git..."
         if [[ ! -f .env-git ]]; then
-          echo "❌ Fichier .env-git non trouvé."
+          echo "Fichier .env-git non trouvé."
           exit 1
         fi
         cat .env-git  # Debug : Afficher le contenu de .env-git
-
         # Charger toutes les variables du fichier .env-git dans $GITHUB_ENV
         while IFS= read -r line; do
           if [[ $line != \#* && $line == *"="* ]]; then
@@ -43,12 +42,6 @@ jobs:
           fi
         done < .env-git
         
-    - name: Debug environment variables
-      run: |
-        echo "📂 APP_LIST = $APP_LIST"
-        echo "📂 APP1_PATH = $APP1_PATH"
-        echo "📂 APP2_PATH = $APP2_PATH"
-
     # Démarrer toutes les applications listées dans le .env-git
     - name: Start all applications
       run: |
@@ -59,14 +52,15 @@ jobs:
           APP_VAR_PATH="${APP_NAME^^}_PATH"  
           APP_PATH="${!APP_VAR_PATH}"
           
-          # Afficher la valeur de APP_PATH pour vérification
-          echo "-----------------------------------"
-          echo "🔍 Vérification de APP_PATH pour $APP_NAME : $APP_PATH"
-          echo "-----------------------------------"
+          APP_VAR_PORT="${APP_NAME^^}_PORT"  # ex: APP1_PORT
+          APP_PORT="${!APP_VAR_PORT}"
 
+        
           # Afficher le nom de l’application et la date
+          echo ".........................................."
           echo "🚀 Démarrage de l'application : $APP_NAME"
           echo "📅 Date : $(date)"
+          echo ".........................................."
           
           # Se déplacer dans le répertoire de l'application
           cd "$APP_PATH"
@@ -78,10 +72,8 @@ jobs:
           npm run build --if-present
           
           # Démarrer l'application et enregistrer le PID
-          npm start &
-          PID=$!
+          PORT="$APP_PORT" npm start & PID=$!
           echo "$PID" > app.pid
           echo "✅ Application $APP_NAME démarrée avec PID $PID"
-
           cd - >/dev/null
         done
