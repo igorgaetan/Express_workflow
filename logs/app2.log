@@ -2,3 +2,6 @@
 > myapp@0.0.0 start
 > node ./bin/www
 
+[0mGET / [32m200 [0m161.046 ms - 765[0m
+[0mGET /stylesheets/style.css [32m200 [0m3.015 ms - 111[0m
+[0mGET /favicon.ico [33m404 [0m8.273 ms - 1332[0m
