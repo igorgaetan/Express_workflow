@@ -17,4 +17,6 @@ kill <PID>
 kill -9 <PID> //forcer l'arret
 
 # Trouver le PID du processus écoutant sur le port 3000
+
+
 PID=$(lsof -i :3000 -t)
